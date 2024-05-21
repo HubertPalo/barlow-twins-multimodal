@@ -61,8 +61,8 @@ class Transform:
         ])
 
     def __call__(self, x):
-        y1 = self.transform(x)
-        y2 = self.transform_prime(x)
+        y1 = self.transform(x).to('cuda:0')
+        y2 = self.transform_prime(x).to('cuda:0')
         return y1, y2
     
 
