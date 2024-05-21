@@ -12,11 +12,6 @@ import os
 
 torch.set_float32_matmul_precision('medium')
 
-if not os.path.exists('data/UCIHAR/dataset/UCI HAR Dataset'):
-    download_uci_dataset()
-    extract_uci_dataset()
-
-
 np.random.seed(42)
 
 train_data, train_y, validation_data, validation_y, test_data, test_y = read_files()
