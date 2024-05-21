@@ -10,6 +10,8 @@ from lightning.pytorch.trainer import Trainer
 import datetime
 import os
 
+torch.set_float32_matmul_precision('medium')
+
 if not os.path.exists('data/UCIHAR/dataset/UCI HAR Dataset'):
     download_uci_dataset()
     extract_uci_dataset()
