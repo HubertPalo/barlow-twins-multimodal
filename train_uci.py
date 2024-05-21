@@ -62,5 +62,5 @@ checkpoint_callback = ModelCheckpoint(
     dirpath=current_date,  # Directory to save the checkpoints
     filename='model',  # Filename format
 )
-trainer = Trainer(limit_train_batches=1.0, max_epochs=100000, callbacks=[early_stopping, checkpoint_callback], accelerator="gpu", devices=0)
+trainer = Trainer(limit_train_batches=1.0, max_epochs=100000, callbacks=[early_stopping, checkpoint_callback], accelerator="gpu", devices=[0])
 trainer.fit(model=bt_model, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)
