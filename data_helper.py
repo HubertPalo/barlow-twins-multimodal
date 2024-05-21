@@ -19,7 +19,7 @@ def extract_uci_dataset():
     with zipfile.ZipFile('data/UCIHAR/UCI HAR Dataset.zip', 'r') as zip_ref:
         zip_ref.extractall('data/UCIHAR/dataset')
 
-def read_files():
+def read_files(validation=True):
     np.random.seed(42)
     base_dir = 'data/UCIHAR/dataset/UCI HAR Dataset'
     # Training data
@@ -63,17 +63,25 @@ def read_files():
     train_data = pd.concat([train_users, train_gyro_x, train_gyro_y, train_gyro_z, train_total_acc_x, train_total_acc_y, train_total_acc_z, train_acc_x, train_acc_y, train_acc_z], axis=1)
     test_data = pd.concat([test_users, test_gyro_x, test_gyro_y, test_gyro_z, test_total_acc_x, test_total_acc_y, test_total_acc_z, test_acc_x, test_acc_y, test_acc_z], axis=1)
     
-    # Choosing the users for training and validation
-    users_for_train = np.random.choice(train_users.iloc[:,0].unique(), 7, replace=False)
-    users_for_validation = np.setdiff1d(train_users.iloc[:,0].unique(), users_for_train)
-    # print(users_for_train, users_for_validation)
-    validation_y = train_y[train_data.iloc[:,0].isin(users_for_validation)]
-    train_y = train_y[train_data.iloc[:,0].isin(users_for_train)]
+    if validation:
+        # Choosing the users for training and validation
+        users_for_train = np.random.choice(train_users.iloc[:,0].unique(), 7, replace=False)
+        users_for_validation = np.setdiff1d(train_users.iloc[:,0].unique(), users_for_train)
+        # print(users_for_train, users_for_validation)
+        validation_y = train_y[train_data.iloc[:,0].isin(users_for_validation)]
+        train_y = train_y[train_data.iloc[:,0].isin(users_for_train)]
+        
+        validation_data = train_data[train_data.iloc[:,0].isin(users_for_validation)]
+        train_data = train_data[train_data.iloc[:,0].isin(users_for_train)]
     
-    validation_data = train_data[train_data.iloc[:,0].isin(users_for_validation)].iloc[:,1:]
-    train_data = train_data[train_data.iloc[:,0].isin(users_for_train)].iloc[:,1:]
-    test_data = test_data.iloc[:,1:]
-    
+        train_data = train_data.iloc[:,1:]
+        validation_data = validation_data.iloc[:,1:]
+        test_data = test_data.iloc[:,1:]
+    else:
+        train_data = train_data.iloc[:,1:]
+        test_data = test_data.iloc[:,1:]
+        validation_data = None
+        validation_y = None
     return train_data, train_y, validation_data, validation_y, test_data, test_y
 
 
