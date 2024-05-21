@@ -9,8 +9,8 @@ from lightning.pytorch.callbacks import EarlyStopping, ModelCheckpoint
 from lightning.pytorch.trainer import Trainer
 import datetime
 from PIL import Image
-from torchvision.transforms import ToPILImage
-from torchvision.transforms import Resize
+from torchvision.transforms import ToPILImage, Resize, ToTensor
+
 
 torch.set_float32_matmul_precision('medium')
 
@@ -22,35 +22,40 @@ train_x = []
 for i in range(train_data.shape[0]):
     signal = train_data.iloc[i,:].values.reshape(9, -1)
     image = timeserie2image(signal)
-    # image = np.array([image, image, image])
-    # print(image.shape, type(image))
-    # Create a PIL Image from image
+    image = np.array([image, image, image])
     image = torch.tensor(image)
     image = ToPILImage()(image)
     image = Resize((224, 224))(image)
-    # print(image.size, type(image))
+    image = ToTensor()(image)
     train_x.append(image)
-train_x = torch.tensor(np.array(train_x))
+# train_x = torch.tensor(np.array(train_x))
+train_x = torch.stack(train_x)
 
 validation_x = []
 for i in range(validation_data.shape[0]):
     signal = validation_data.iloc[i,:].values.reshape(9, -1)
     image = timeserie2image(signal)
+    image = np.array([image, image, image])
     image = torch.tensor(image)
     image = ToPILImage()(image)
     image = Resize((224, 224))(image)
+    image = ToTensor()(image)
     validation_x.append(image)
-validation_x = torch.tensor(np.array(validation_x))
+# validation_x = torch.tensor(np.array(validation_x))
+validation_x = torch.stack(validation_x)
 
 test_x = []
 for i in range(test_data.shape[0]):
     signal = test_data.iloc[i,:].values.reshape(9, -1)
     image = timeserie2image(signal)
+    image = np.array([image, image, image])
     image = torch.tensor(image)
     image = ToPILImage()(image)
     image = Resize((224, 224))(image)
+    image = ToTensor()(image)
     test_x.append(image)
-test_x = torch.tensor(np.array(test_x))
+# test_x = torch.tensor(np.array(test_x))
+test_x = torch.stack(test_x)
 
 train_dataset = UCIHARDataset(train_x, train_y, transform=Transform())
 val_dataset = UCIHARDataset(validation_x, validation_y, transform=Transform())
