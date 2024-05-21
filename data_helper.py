@@ -65,8 +65,8 @@ def read_files(validation=True):
     
     if validation:
         # Choosing the users for training and validation
-        users_for_train = np.random.choice(train_users.iloc[:,0].unique(), 7, replace=False)
-        users_for_validation = np.setdiff1d(train_users.iloc[:,0].unique(), users_for_train)
+        users_for_validation = np.random.choice(train_users.iloc[:,0].unique(), 7, replace=False)
+        users_for_train = np.setdiff1d(train_users.iloc[:,0].unique(), users_for_validation)
         # print(users_for_train, users_for_validation)
         validation_y = train_y[train_data.iloc[:,0].isin(users_for_validation)]
         train_y = train_y[train_data.iloc[:,0].isin(users_for_train)]
