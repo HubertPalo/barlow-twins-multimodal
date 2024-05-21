@@ -27,7 +27,7 @@ for i in range(train_data.shape[0]):
     image = timeserie2image(signal)
     image = np.array([image, image, image])
     train_x.append(image)
-train_x = torch.tensor(np.array(train_x))
+train_x = torch.tensor(np.array(train_x)).to('cuda')
 
 validation_x = []
 for i in range(validation_data.shape[0]):
@@ -35,7 +35,7 @@ for i in range(validation_data.shape[0]):
     image = timeserie2image(signal)
     image = np.array([image, image, image])
     validation_x.append(image)
-validation_x = torch.tensor(np.array(validation_x))
+validation_x = torch.tensor(np.array(validation_x)).to('cuda')
 
 test_x = []
 for i in range(test_data.shape[0]):
