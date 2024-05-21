@@ -4,8 +4,8 @@ from torch.utils.data import Dataset
 class UCIHARDataset(Dataset):
     def __init__(self, x, y, transform, output_num=2) -> None:
         super().__init__()
-        self.x = x.to('cuda')
-        self.y = y.to('cuda')
+        self.x = x
+        self.y = y
         self.transform = transform
         self.output_num = output_num
         
@@ -14,6 +14,10 @@ class UCIHARDataset(Dataset):
 
     def __getitem__(self, index):
         sample = self.x[index]
+        # Check if tensor sample is on gpu or cpu
+        print(sample.device.type)
+            
+
         # print(sample.shape)
         # print(self.y.shape)
         label = self.y.iloc[index,0]
