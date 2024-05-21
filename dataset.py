@@ -15,7 +15,7 @@ class UCIHARDataset(Dataset):
     def __getitem__(self, index):
         sample = self.x[index]
         # Check if tensor sample is on gpu or cpu
-        print(sample.device.type)
+        # print(sample.device.type)
             
 
         # print(sample.shape)
