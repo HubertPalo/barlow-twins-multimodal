@@ -1,4 +1,4 @@
-from data_helper import timeserie2image, read_files
+from data_helper import timeserie2image, read_files, download_uci_dataset, extract_uci_dataset
 import numpy as np
 import pandas as pd
 from dataset import UCIHARDataset
@@ -8,6 +8,11 @@ from barlowtwins import BarlowTwins
 from lightning.pytorch.callbacks import EarlyStopping, ModelCheckpoint
 from lightning.pytorch.trainer import Trainer
 import datetime
+import os
+
+if not os.path.exists('data/UCIHAR/dataset/UCI HAR Dataset'):
+    download_uci_dataset()
+    extract_uci_dataset()
 
 
 np.random.seed(42)
