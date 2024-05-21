@@ -43,7 +43,7 @@ for i in range(test_data.shape[0]):
     image = timeserie2image(signal)
     image = np.array([image, image, image])
     test_x.append(image)
-test_x = torch.tensor(np.array(test_x))
+test_x = torch.tensor(np.array(test_x)).to('cuda')
 
 train_dataset = UCIHARDataset(train_x, train_y, transform=Transform())
 val_dataset = UCIHARDataset(validation_x, validation_y, transform=Transform())
