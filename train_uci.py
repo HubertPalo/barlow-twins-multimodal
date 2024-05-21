@@ -49,9 +49,9 @@ train_dataset = UCIHARDataset(train_x, train_y, transform=Transform())
 val_dataset = UCIHARDataset(validation_x, validation_y, transform=Transform())
 test_dataset = UCIHARDataset(test_x, test_y, transform=Transform())
 
-train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=256, shuffle=True, num_workers=5)
-val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=256, shuffle=False, num_workers=5)
-test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=256, shuffle=False, num_workers=5)
+train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=256, shuffle=True)
+val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=256, shuffle=False)
+test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=256, shuffle=False)
 
 bt_model = BarlowTwins()
 current_date = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
