@@ -40,7 +40,7 @@ class BarlowTwins(L.LightningModule):
         z1 = self.forward(x1)
         z2 = self.forward(x2)
         loss = self.criterion(z1, z2)
-        self.log("train_loss", loss)
+        self.log("val_loss", loss)
         return loss
     
     def predict_step(self, batch, batch_idx, dataloader_idx=0):
