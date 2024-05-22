@@ -26,10 +26,10 @@ for i in range(train_data.shape[0]):
     image = torch.tensor(image)
     image = ToPILImage()(image)
     image = Resize((224, 224))(image)
-    image = ToTensor()(image)
+    # image = ToTensor()(image)
     train_x.append(image)
 # train_x = torch.tensor(np.array(train_x))
-train_x = torch.stack(train_x)
+# train_x = torch.stack(train_x)
 
 validation_x = []
 for i in range(validation_data.shape[0]):
@@ -39,10 +39,10 @@ for i in range(validation_data.shape[0]):
     image = torch.tensor(image)
     image = ToPILImage()(image)
     image = Resize((224, 224))(image)
-    image = ToTensor()(image)
+    # image = ToTensor()(image)
     validation_x.append(image)
 # validation_x = torch.tensor(np.array(validation_x))
-validation_x = torch.stack(validation_x)
+# validation_x = torch.stack(validation_x)
 
 test_x = []
 for i in range(test_data.shape[0]):
@@ -52,10 +52,10 @@ for i in range(test_data.shape[0]):
     image = torch.tensor(image)
     image = ToPILImage()(image)
     image = Resize((224, 224))(image)
-    image = ToTensor()(image)
+    # image = ToTensor()(image)
     test_x.append(image)
 # test_x = torch.tensor(np.array(test_x))
-test_x = torch.stack(test_x)
+# test_x = torch.stack(test_x)
 
 train_dataset = UCIHARDataset(train_x, train_y, transform=Transform())
 val_dataset = UCIHARDataset(validation_x, validation_y, transform=Transform())
