@@ -32,7 +32,7 @@ def main(args):
     early_stopping = EarlyStopping('val_loss', patience=args.patience, verbose=True, mode='min')
     checkpoint_callback = ModelCheckpoint(monitor='val_loss', mode='min', save_top_k=1, dirpath=args.dirpath, filename=args.filename)
 
-    trainer = Trainer(limit_train_batches=50, max_epochs=args.max_epochs, callbacks=[early_stopping, checkpoint_callback], accelerator="gpu", devices=[0])
+    trainer = Trainer(limit_train_batches=1.0, max_epochs=args.max_epochs, callbacks=[early_stopping, checkpoint_callback], accelerator="gpu", devices=[0])
     trainer.fit(model=bt_model, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)
 
 if __name__ == '__main__':
