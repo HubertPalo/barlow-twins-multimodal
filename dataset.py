@@ -20,7 +20,7 @@ class UCIHARDataset(Dataset):
 
         # print(sample.shape)
         # print(self.y.shape)
-        label = self.y.iloc[index,0]
+        label = self.y.iloc[index,0]-1
         if self.output_num == 1:
             if self.transform is not None:
                 sample = self.transform(sample)
