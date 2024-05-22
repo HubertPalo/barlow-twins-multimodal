@@ -82,3 +82,5 @@ trainer = Trainer(accelerator="gpu", devices=[0])
 
 predictions = trainer.predict(model=classifier, dataloaders=test_dataloader, return_predictions=True)
 print(predictions)
+# print(torch.stack(predictions).shape)
+# y_orig = [val[1] for val in predictions]
