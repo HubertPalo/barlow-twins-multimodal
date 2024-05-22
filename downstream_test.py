@@ -80,5 +80,5 @@ classifier = SSLClassifier.load_from_checkpoint(f'{model_folder}TEST/model.ckpt'
 trainer = Trainer(accelerator="gpu", devices=[0])
 # trainer.fit(model=classifier, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)
 
-predictions = trainer.predict(model=classifier, test_dataloaders=test_dataloader)
+predictions = trainer.predict(model=classifier, dataloaders=test_dataloader, return_predictions=True)
 print(predictions)
