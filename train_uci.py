@@ -8,8 +8,7 @@ from barlowtwins import BarlowTwins
 from lightning.pytorch.callbacks import EarlyStopping, ModelCheckpoint
 from lightning.pytorch.trainer import Trainer
 import datetime
-from PIL import Image
-from torchvision.transforms import ToPILImage, Resize, ToTensor
+from torchvision.transforms import ToPILImage, Resize
 
 
 torch.set_float32_matmul_precision('medium')
