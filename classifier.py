@@ -19,7 +19,7 @@ class SSLClassifier(L.LightningModule):
 
     def forward(self, x):
         print("FORWARD1", x.shape)
-        x = self.backbone(x)
+        x = self.backbone(x).flatten(start_dim=1)
         print("FORWARD2", x.shape)
         x = self.prediction_head(x)
         print("FORWARD3", x.shape)
