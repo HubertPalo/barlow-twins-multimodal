@@ -86,7 +86,13 @@ y_pred = []
 for pred_list in predictions:
     y_orig.extend(pred_list[1].tolist())
     y_pred.extend(pred_list[0].tolist())
-print(y_orig)
-print(y_pred)
+
+from torchmetrics.classification import MulticlassConfusionMatrix
+target = torch.tensor(y_orig)
+preds = torch.tensor(y_pred)
+metric = MulticlassConfusionMatrix(num_classes=6)
+metric(preds, target)
+
+
 # print(torch.stack(predictions).shape)
 # y_orig = [val[1] for val in predictions]
