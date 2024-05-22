@@ -21,7 +21,8 @@ class UCIHARDataset(Dataset):
         # print(sample.shape)
         # print(self.y.shape)
         label = self.y.iloc[index,0]
-        if self.transform is None:
+        if self.output_num == 1:
+            sample = self.transform(sample)
             return sample, label
         sample1, sample2 = self.transform(sample)
         return sample1, sample2, label
