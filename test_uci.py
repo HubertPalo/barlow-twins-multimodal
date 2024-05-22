@@ -18,6 +18,8 @@ torch.set_float32_matmul_precision('medium')
 
 
 prediction_head = nn.Sequential(
+    # From (512,1,1) to (512)
+    nn.Flatten(),
     nn.Linear(512, 256),
     nn.ReLU(),
     nn.Linear(256, 6)
