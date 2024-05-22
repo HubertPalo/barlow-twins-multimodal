@@ -15,7 +15,7 @@ class BarlowTwins(L.LightningModule):
 
         resnet = torchvision.models.resnet18()
         self.backbone = nn.Sequential(*list(resnet.children())[:-1])
-        self.projection_head = BarlowTwinsProjectionHead(512, 512, 512)
+        self.projection_head = BarlowTwinsProjectionHead(512, 2048, 2048)
 
         # enable gather_distributed to gather features from all gpus
         # before calculating the loss
