@@ -67,7 +67,7 @@ test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=256, shuf
 
 bt_model = BarlowTwins()
 current_date = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-
+current_date = f'barlowtwins_training'
 early_stopping = EarlyStopping('val_loss', patience=100, verbose=True, mode='min')
 checkpoint_callback = ModelCheckpoint(
     monitor='val_loss',  # Monitor validation loss
