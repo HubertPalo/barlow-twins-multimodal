@@ -18,11 +18,11 @@ class SSLClassifier(L.LightningModule):
         self.loss_function = nn.CrossEntropyLoss()
 
     def forward(self, x):
-        print("FORWARD1", x.shape)
+        # print("FORWARD1", x.shape)
         x = self.backbone(x).flatten(start_dim=1)
-        print("FORWARD2", x.shape)
+        # print("FORWARD2", x.shape)
         x = self.prediction_head(x)
-        print("FORWARD3", x.shape)
+        # print("FORWARD3", x.shape)
         return x
     
     def training_step(self, batch, batch_idx):
