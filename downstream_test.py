@@ -91,7 +91,7 @@ from torchmetrics.classification import MulticlassConfusionMatrix
 target = torch.tensor(y_orig)
 preds = torch.tensor(y_pred)
 metric = MulticlassConfusionMatrix(num_classes=6)
-metric(preds, target)
+print(metric(preds, target))
 
 
 # print(torch.stack(predictions).shape)
