@@ -13,13 +13,7 @@ class UCIHARDataset(Dataset):
         return len(self.x)
 
     def __getitem__(self, index):
-        sample = self.x[index]#.to('cuda:0')
-        # Check if tensor sample is on gpu or cpu
-        # print(sample.device.type)
-            
-
-        # print(sample.shape)
-        # print(self.y.shape)
+        sample = self.x[index]
         label = self.y.iloc[index,0]-1
         if self.output_num == 1:
             if self.transform is not None:

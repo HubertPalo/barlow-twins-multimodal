@@ -32,7 +32,7 @@ def main(args):
     early_stopping = EarlyStopping('val_loss', patience=args.patience, verbose=True, mode='min')
     checkpoint_callback = ModelCheckpoint(monitor='val_loss', mode='min', save_top_k=1, dirpath=args.dirpath, filename=args.filename)
 
-    trainer = Trainer(limit_train_batches=1.0, max_epochs=args.max_epochs, callbacks=[early_stopping, checkpoint_callback], accelerator="gpu", devices=[0])
+    trainer = Trainer(limit_train_batches=50, max_epochs=args.max_epochs, callbacks=[early_stopping, checkpoint_callback], accelerator="gpu", devices=[0])
     trainer.fit(model=bt_model, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)
 
 if __name__ == '__main__':
@@ -40,8 +40,8 @@ if __name__ == '__main__':
     parser.add_argument('--batch-size', type=int, default=256, help='Batch size', required=False)
     parser.add_argument('--patience', type=int, default=10, help='Patience for early stopping', required=False)
     parser.add_argument('--max-epochs', type=int, default=100000, help='Maximum number of epochs', required=False)
-    parser.add_argument('--num-workers', type=int, default=10, help='Number of workers for dataloader', required=False)
+    parser.add_argument('--num-workers', type=int, default=0, help='Number of workers for dataloader', required=False)
+    parser.add_argument('--filename', type=str, default='model', help='Checkpoint file name', required=False)
     parser.add_argument('--dirpath', type=str, help='Directory to save the checkpoints', required=True)
-    parser.add_argument('--filename', type=str, help='Filename format', required=True)
     args = parser.parse_args()
     main(args)

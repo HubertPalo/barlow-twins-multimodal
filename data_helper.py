@@ -7,6 +7,7 @@ from PIL import Image
 import matplotlib.pyplot as plt4
 import torch
 from torchvision.transforms import ToPILImage, Resize
+import matplotlib.pyplot as plt
 
 def download_uci_dataset():
     os.makedirs('zips', exist_ok=True)
