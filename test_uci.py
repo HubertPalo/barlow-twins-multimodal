@@ -64,9 +64,9 @@ for i in range(test_data.shape[0]):
     test_x.append(image)
 # test_x = torch.tensor(np.array(test_x))
 
-train_dataset = UCIHARDataset(train_x, train_y, transform=ResizeTransform(), output_num=1)
-val_dataset = UCIHARDataset(val_x, validation_y, transform=ResizeTransform(), output_num=1)
-test_dataset = UCIHARDataset(test_x, test_y, transform=ResizeTransform(), output_num=1)
+train_dataset = UCIHARDataset(train_x, train_y, transform=None, output_num=1)
+val_dataset = UCIHARDataset(val_x, validation_y, transform=None, output_num=1)
+test_dataset = UCIHARDataset(test_x, test_y, transform=None, output_num=1)
 
 train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=256, shuffle=True)
 val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=256, shuffle=False)
