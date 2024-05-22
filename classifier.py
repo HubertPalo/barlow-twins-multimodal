@@ -53,7 +53,7 @@ class SSLClassifier(L.LightningModule):
     def predict_step(self, batch, batch_idx, dataloader_idx=0):
         x = batch[0]
         x = self(x)
-        x = np.argmax(x, axis=1)
+        x = np.argmax(x.cpu(), axis=1)
         return [x, batch[1]]
     
     def configure_optimizers(self):
