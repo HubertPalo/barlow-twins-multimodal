@@ -1,5 +1,6 @@
 from torch import optim, nn
 import lightning as L
+import numpy as np
 
 
 class SSLClassifier(L.LightningModule):
@@ -52,8 +53,8 @@ class SSLClassifier(L.LightningModule):
     def predict_step(self, batch, batch_idx, dataloader_idx=0):
         x = batch[0]
         x = self(x)
-        x = nn.functional.softmax(x, dim=1)
-        return x, batch[1]
+        x = np.argmax(x, axis=1)
+        return [x, batch[1]]
     
     def configure_optimizers(self):
         optimizer = optim.Adam(self.parameters())
