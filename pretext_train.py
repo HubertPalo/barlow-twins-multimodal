@@ -18,19 +18,16 @@ def main(args):
     train_data, train_y, validation_data, validation_y, _, _ = read_files()
     train_x = preprocess_data(train_data)
     validation_x = preprocess_data(validation_data)
-    # test_x = preprocess_data(test_data)
 
     train_dataset = UCIHARDataset(train_x, train_y, transform=Transform())
     val_dataset = UCIHARDataset(validation_x, validation_y, transform=Transform())
-    # test_dataset = UCIHARDataset(test_x, test_y, transform=Transform())
-
+    
     train_dataloader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers)
     val_dataloader = DataLoader(val_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers)
-    # test_dataloader = DataLoader(test_dataset, batch_size=256, shuffle=False, num_workers=10)
-
+    
     bt_model = BarlowTwins()
     early_stopping = EarlyStopping('val_loss', patience=args.patience, verbose=True, mode='min')
-    checkpoint_callback = ModelCheckpoint(monitor='val_loss', mode='min', save_top_k=1, dirpath=args.dirpath, filename=args.filename)
+    checkpoint_callback = ModelCheckpoint(monitor='val_loss', mode='min', save_top_k=1, dirpath=args.dirpath, filename=f'BT-PRETEXT-{args.filename}')
 
     trainer = Trainer(limit_train_batches=1.0, max_epochs=args.max_epochs, callbacks=[early_stopping, checkpoint_callback], accelerator="gpu", devices=[0])
     trainer.fit(model=bt_model, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)
