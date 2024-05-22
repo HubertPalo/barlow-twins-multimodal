@@ -82,4 +82,4 @@ checkpoint_callback = ModelCheckpoint(
     filename='model',  # Filename format
 )
 trainer = Trainer(limit_train_batches=1.0, max_epochs=10, callbacks=[early_stopping, checkpoint_callback], accelerator="gpu", devices=[0])
-trainer.fit(model=model, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)
+trainer.fit(model=classifier, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)
