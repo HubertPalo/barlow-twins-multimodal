@@ -4,7 +4,9 @@ import os
 import pandas as pd
 import numpy as np
 from PIL import Image
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt4
+import torch
+from torchvision.transforms import ToPILImage, Resize
 
 def download_uci_dataset():
     os.makedirs('zips', exist_ok=True)
@@ -67,6 +69,8 @@ def read_files(validation=True):
         # Choosing the users for training and validation
         users_for_validation = np.random.choice(train_users.iloc[:,0].unique(), 7, replace=False)
         users_for_train = np.setdiff1d(train_users.iloc[:,0].unique(), users_for_validation)
+        print("Users used for training: ", users_for_train)
+        print("Users used for validation: ", users_for_validation)
         # print(users_for_train, users_for_validation)
         validation_y = train_y[train_data.iloc[:,0].isin(users_for_validation)]
         train_y = train_y[train_data.iloc[:,0].isin(users_for_train)]
@@ -109,3 +113,16 @@ def timeserie2image(data, filename=None, indexes=[1,2,3,4,5,6,7,8,9,1,3,5,7,9,2,
         plt.close()
         print(data.shape)
     return data
+
+def preprocess_data(data: pd.DataFrame):
+    result = []
+    for i in range(data.shape[0]):
+        signal = data.iloc[i,:].values.reshape(9, -1)
+        image = timeserie2image(signal)
+        image = np.array([image, image, image])
+        image = torch.tensor(image)
+        image = ToPILImage()(image)
+        image = Resize((224, 224))(image)
+        # image = ToTensor()(image)
+        result.append(image)
+    return result
