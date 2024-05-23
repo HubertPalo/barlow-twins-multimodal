@@ -1,4 +1,4 @@
-from data_helper import timeserie2image, read_files, download_uci_dataset, extract_uci_dataset
+from data_helper import timeserie2image, read_files, preprocess_data
 import numpy as np
 import pandas as pd
 from dataset import UCIHARDataset
@@ -32,46 +32,10 @@ classifier = SSLClassifier(backbone=model.backbone, prediction_head=prediction_h
 np.random.seed(42)
 
 train_data, train_y, validation_data, validation_y, test_data, test_y = read_files()
+test_x = preprocess_data(test_data)
 
-# train_x = []
-# for i in range(train_data.shape[0]):
-#     signal = train_data.iloc[i,:].values.reshape(9, -1)
-#     image = timeserie2image(signal)
-#     image = np.array([image, image, image])
-#     image = torch.tensor(image)
-#     image = ToPILImage()(image)
-#     image = Resize((224, 224))(image)
-#     train_x.append(image)
-# # train_x = torch.tensor(np.array(train_x))
-
-# val_x = []
-# for i in range(validation_data.shape[0]):
-#     signal = validation_data.iloc[i,:].values.reshape(9, -1)
-#     image = timeserie2image(signal)
-#     image = np.array([image, image, image])
-#     image = torch.tensor(image)
-#     image = ToPILImage()(image)
-#     image = Resize((224, 224))(image)
-#     val_x.append(image)
-# val_x = torch.tensor(np.array(val_x))
-
-test_x = []
-for i in range(test_data.shape[0]):
-    signal = test_data.iloc[i,:].values.reshape(9, -1)
-    image = timeserie2image(signal)
-    image = np.array([image, image, image])
-    image = torch.tensor(image)
-    image = ToPILImage()(image)
-    image = Resize((224, 224))(image)
-    test_x.append(image)
-# test_x = torch.tensor(np.array(test_x))
-
-# train_dataset = UCIHARDataset(train_x, train_y, transform=ResizeTransform(), output_num=1)
-# val_dataset = UCIHARDataset(val_x, validation_y, transform=ResizeTransform(), output_num=1)
 test_dataset = UCIHARDataset(test_x, test_y, transform=ResizeTransform(), output_num=1)
 
-# train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=256, shuffle=True)
-# val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=256, shuffle=False)
 test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=256, shuffle=False)
 
 classifier = SSLClassifier.load_from_checkpoint(f'{model_folder}TEST/model.ckpt', backbone=model.backbone, prediction_head=prediction_head, freeze_backbone=True)

@@ -24,8 +24,8 @@ def main(args):
         nn.ReLU(),
         nn.Linear(256, 6)
     )
-    model_folder = 'barlowtwins_training'
-    model = BarlowTwins.load_from_checkpoint(f'{model_folder}/model.ckpt')
+    
+    model = BarlowTwins.load_from_checkpoint(f'{args.dirpath}/BT-PRETEXT-{args.filename}.ckpt')
     classifier = SSLClassifier(backbone=model.backbone, prediction_head=prediction_head, freeze_backbone=True)
 
 
@@ -38,12 +38,12 @@ def main(args):
     train_dataset = UCIHARDataset(train_x, train_y, transform=ResizeTransform(), output_num=1)
     val_dataset = UCIHARDataset(validation_x, validation_y, transform=ResizeTransform(), output_num=1)
 
-    train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=256, shuffle=True)
-    val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=256, shuffle=False)
+    train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers)
+    val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers)
 
 
     early_stopping = EarlyStopping('val_loss', patience=args.patience, verbose=True, mode='min')
-    checkpoint_callback = ModelCheckpoint(monitor='val_loss', mode='min', dirpath=model_folder+'TEST', filename=f'BT-PRETEXT-{args.model}')
+    checkpoint_callback = ModelCheckpoint(monitor='val_loss', mode='min', dirpath=args.dirpath, filename=f'BT-DOWNSTREAM-{args.model}')
     trainer = Trainer(limit_train_batches=1.0, max_epochs=args.max_epochs, callbacks=[early_stopping, checkpoint_callback], accelerator="gpu", devices=[0])
     trainer.fit(model=classifier, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)
 
