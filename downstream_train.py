@@ -43,7 +43,7 @@ def main(args):
 
 
     early_stopping = EarlyStopping('val_loss', patience=args.patience, verbose=True, mode='min')
-    checkpoint_callback = ModelCheckpoint(monitor='val_loss', mode='min', dirpath=args.dirpath, filename=f'BT-DOWNSTREAM-{args.model}')
+    checkpoint_callback = ModelCheckpoint(monitor='val_loss', mode='min', dirpath=args.dirpath, filename=f'BT-DOWNSTREAM-{args.filename}')
     trainer = Trainer(limit_train_batches=1.0, max_epochs=args.max_epochs, callbacks=[early_stopping, checkpoint_callback], accelerator="gpu", devices=[0])
     trainer.fit(model=classifier, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)
 
