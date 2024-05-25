@@ -34,6 +34,8 @@ def main(args):
     y_orig = []
     y_pred = []
     for pred_list in predictions:
+        for i in range(len(pred_list[1])):
+            print('ORIG', pred_list[1][i], 'PRED', pred_list[0][i])
         y_orig.extend(pred_list[1].tolist())
         y_pred.extend(pred_list[0].tolist())
 
