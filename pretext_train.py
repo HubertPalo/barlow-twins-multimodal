@@ -27,7 +27,7 @@ def main(args):
     
     bt_model = BarlowTwins()
     early_stopping = EarlyStopping('val_loss', patience=args.patience, verbose=True, mode='min')
-    checkpoint_callback = ModelCheckpoint(monitor='val_loss', mode='min', save_top_k=1, dirpath=args.dirpath, filename=f'BT-PRETEXT-{args.filename}')
+    checkpoint_callback = ModelCheckpoint(monitor='val_loss', mode='min', save_top_k=1, dirpath='experiments/'+args.dirpath, filename=f'BT-PRETEXT-{args.filename}')
 
     trainer = Trainer(limit_train_batches=1.0, max_epochs=args.max_epochs, callbacks=[early_stopping, checkpoint_callback], accelerator="gpu", devices=[0])
     trainer.fit(model=bt_model, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)
