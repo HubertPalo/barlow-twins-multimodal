@@ -17,7 +17,7 @@ np.random.seed(42)
 def main(args):
     os.makedirs(f'{args.exp_folder}/{args.dirpath}', exist_ok=True)
     model = BarlowTwins.load_from_checkpoint(f'{args.exp_folder}/{args.dirpath}/BT-PRETEXT-{args.filename}.ckpt')
-    classifier = SSLClassifier(backbone=model.backbone, freeze_backbone=True)
+    classifier = SSLClassifier(backbone=model.backbone, freeze_backbone=args.freeze_backbone)
 
     train_data, train_y, validation_data, validation_y, _, _ = read_files()
     train_x = preprocess_data(train_data)
@@ -29,9 +29,10 @@ def main(args):
     train_dataloader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers)
     val_dataloader = DataLoader(val_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers)
 
+    prefix = 'FROZEN' if args.freeze_backbone else 'FINETUNING'
 
     early_stopping = EarlyStopping('val_loss', patience=args.patience, verbose=True, mode='min')
-    checkpoint_callback = ModelCheckpoint(monitor='val_loss', mode='min', dirpath=f'{args.exp_folder}/{args.dirpath}', filename=f'BT-DOWNSTREAM-{args.filename}')
+    checkpoint_callback = ModelCheckpoint(monitor='val_loss', mode='min', dirpath=f'{args.exp_folder}/{args.dirpath}', filename=f'BT-DOWNSTREAM-{prefix}-{args.filename}')
     trainer = Trainer(limit_train_batches=1.0, max_epochs=args.max_epochs, callbacks=[early_stopping, checkpoint_callback], accelerator="gpu", devices=[0])
     trainer.fit(model=classifier, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)
 
@@ -43,6 +44,7 @@ if __name__ == '__main__':
     parser.add_argument('--max-epochs', type=int, default=100000, help='Maximum number of epochs', required=False)
     parser.add_argument('--num-workers', type=int, default=0, help='Number of workers for dataloader', required=False)
     parser.add_argument('--filename', type=str, default='model', help='Checkpoint file name', required=False)
+    parser.add_argument('--freeze-backbone', type=bool, default=True, help='Freeze the backbone', required=False)
     parser.add_argument('--dirpath', type=str, help='Directory to save the checkpoints', required=True)
     args = parser.parse_args()
     main(args)
