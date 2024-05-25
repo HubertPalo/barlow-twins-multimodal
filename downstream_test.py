@@ -10,23 +10,31 @@ from lightning.pytorch.trainer import Trainer
 import datetime
 import os
 from classifier import SSLClassifier
-from torch import nn
+from torch import nn, set_float32_matmul_precision
 from torchvision.transforms import ToPILImage, Resize
 
+set_float32_matmul_precision('medium')
+np.random.seed(42)
 
-torch.set_float32_matmul_precision('medium')
+def main(args):
+    prediction_head = nn.Sequential(
+        # From (512,1,1) to (512)
+        # nn.Flatten(),
+        nn.Linear(512, 256),
+        nn.ReLU(),
+        nn.Linear(256, 6)
+    )
+    
+    model = BarlowTwins.load_from_checkpoint(f'{args.dirpath}/BT-PRETEXT-{args.filename}.ckpt')
+    classifier = SSLClassifier.load_from_checkpoint(
+        f'{args.dirpath}/BT-DOWNSTREAM-{args.filename}.ckpt',
+        # backbone=model.backbone,
+        # prediction_head=prediction_head, freeze_backbone=True
+        )
+    classifier = SSLClassifier(backbone=model.backbone, prediction_head=prediction_head, freeze_backbone=True)
 
-
-prediction_head = nn.Sequential(
-    # From (512,1,1) to (512)
-    # nn.Flatten(),
-    nn.Linear(512, 256),
-    nn.ReLU(),
-    nn.Linear(256, 6)
-)
-model_folder = 'barlowtwins_training'
-model = BarlowTwins.load_from_checkpoint(f'{model_folder}/model.ckpt')
-classifier = SSLClassifier(backbone=model.backbone, prediction_head=prediction_head, freeze_backbone=True)
+    model = BarlowTwins.load_from_checkpoint(f'{model_folder}/model.ckpt')
+    classifier = SSLClassifier(backbone=model.backbone, prediction_head=prediction_head, freeze_backbone=True)
 
 
 np.random.seed(42)

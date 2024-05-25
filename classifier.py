@@ -7,7 +7,7 @@ class SSLClassifier(L.LightningModule):
     def __init__(
             self,
             backbone,
-            prediction_head,
+            # prediction_head,
             freeze_backbone=True
             ):
         super().__init__()
@@ -15,7 +15,13 @@ class SSLClassifier(L.LightningModule):
         # Freeze the backbone
         for param in self.backbone.parameters():
             param.requires_grad = not freeze_backbone
-        self.prediction_head = prediction_head
+        self.prediction_head = nn.Sequential(
+            nn.Linear(512, 256),
+            nn.BatchNorm1d(256),
+            nn.Dropout(0.25),
+            nn.ReLU(),
+            nn.Linear(256, 6)
+        )
         self.loss_function = nn.CrossEntropyLoss()
 
     def forward(self, x):
