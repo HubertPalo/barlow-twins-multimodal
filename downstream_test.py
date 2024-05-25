@@ -21,7 +21,7 @@ def main(args):
     prefix = 'FROZEN' if args.freeze_backbone else 'FINETUNING'
     model = BarlowTwins.load_from_checkpoint(f'{args.exp_folder}/{args.dirpath}/BT-PRETEXT-{args.filename}.ckpt')
     classifier = SSLClassifier.load_from_checkpoint(
-        f'{args.dirpath}/BT-DOWNSTREAM-{prefix}-{args.filename}.ckpt',
+        f'{args.exp_folder}/{args.dirpath}/BT-DOWNSTREAM-{prefix}-{args.filename}.ckpt',
         backbone=model.backbone,
         freeze_backbone=True
         )
