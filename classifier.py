@@ -20,7 +20,9 @@ class SSLClassifier(L.LightningModule):
             nn.BatchNorm1d(256),
             nn.Dropout(0.25),
             nn.ReLU(),
-            nn.Linear(256, 6)
+            nn.Linear(256, 128),
+            nn.BatchNorm1d(128),
+            nn.Linear(128, 6)
         )
         self.loss_function = nn.CrossEntropyLoss()
 
@@ -64,6 +66,7 @@ class SSLClassifier(L.LightningModule):
         x = self(x)
         print("PREDICT SHAPE", x.shape)
         x = np.argmax(x.cpu(), axis=1)
+        
         print("PREDICT SHAPE", x.shape)
         print("PREDICT", x)
         print("PREDICT2", batch[1])
