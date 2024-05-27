@@ -28,7 +28,7 @@ def main(args):
         )
     
     os.makedirs(f'{args.exp_folder}/{args.dirpath}', exist_ok=True)
-    model = BarlowTwins.load_from_checkpoint(f'{args.exp_folder}/{args.dirpath}/BT-PRETEXT-{args.filename}.ckpt')
+    model = BarlowTwins.load_from_checkpoint(f'{args.exp_folder}/{args.dirpath}/BT-PRETEXT-{args.pretext_model_filename}.ckpt')
     classifier = SSLClassifier(backbone=model.backbone, prediction_head=prediction_head, freeze_backbone=args.freeze_backbone)
 
     train_data, train_y, validation_data, validation_y, _, _ = read_files()
@@ -44,7 +44,7 @@ def main(args):
     prefix = 'FROZEN' if args.freeze_backbone else 'FINETUNING'
 
     early_stopping = EarlyStopping('val_loss', patience=args.patience, verbose=True, mode='min')
-    checkpoint_callback = ModelCheckpoint(monitor='val_loss', mode='min', dirpath=f'{args.exp_folder}/{args.dirpath}', filename=f'BT-DOWNSTREAM-{prefix}-{args.filename}')
+    checkpoint_callback = ModelCheckpoint(monitor='val_loss', mode='min', dirpath=f'{args.exp_folder}/{args.dirpath}', filename=f'BT-DOWNSTREAM-{prefix}-{args.downstream_model_filename}')
     trainer = Trainer(limit_train_batches=1.0, max_epochs=args.max_epochs, callbacks=[early_stopping, checkpoint_callback], accelerator="gpu", devices=[0])
     trainer.fit(model=classifier, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)
 
@@ -55,7 +55,8 @@ if __name__ == '__main__':
     parser.add_argument('--patience', type=int, default=10, help='Patience for early stopping', required=False)
     parser.add_argument('--max-epochs', type=int, default=100000, help='Maximum number of epochs', required=False)
     parser.add_argument('--num-workers', type=int, default=0, help='Number of workers for dataloader', required=False)
-    parser.add_argument('--filename', type=str, default='model', help='Checkpoint file name', required=False)
+    parser.add_argument('--pretext-model-filename', type=str, default='model', help='Checkpoint file name', required=False)
+    parser.add_argument('--downstream-model-filename', type=str, default='model', help='Checkpoint file name', required=False)
     parser.add_argument('--freeze-backbone', type=bool, default=True, help='Freeze the backbone', required=False)
     parser.add_argument('--dirpath', type=str, help='Directory to save the checkpoints', required=True)
     args = parser.parse_args()

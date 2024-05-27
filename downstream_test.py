@@ -23,7 +23,7 @@ def main(args):
     prefix = 'FROZEN' if args.freeze_backbone else 'FINETUNING'
     # model = BarlowTwins.load_from_checkpoint(f'{args.exp_folder}/{args.dirpath}/BT-PRETEXT-{args.filename}.ckpt')
     classifier = SSLClassifier.load_from_checkpoint(
-        f'{args.exp_folder}/{args.dirpath}/BT-DOWNSTREAM-{prefix}-{args.filename}.ckpt',
+        f'{args.exp_folder}/{args.dirpath}/BT-DOWNSTREAM-{prefix}-{args.downstream_model_filename}.ckpt',
         freeze_backbone=True
         )
     _, _, _, _, test_data, test_y = read_files()
@@ -56,7 +56,8 @@ if __name__ == '__main__':
     # parser.add_argument('--patience', type=int, default=10, help='Patience for early stopping', required=False)
     # parser.add_argument('--max-epochs', type=int, default=100000, help='Maximum number of epochs', required=False)
     # parser.add_argument('--num-workers', type=int, default=0, help='Number of workers for dataloader', required=False)
-    parser.add_argument('--filename', type=str, default='model', help='Checkpoint file name', required=False)
+    parser.add_argument('--pretext-model-filename', type=str, default='model', help='Checkpoint file name', required=False)
+    parser.add_argument('--downstream-model-filename', type=str, default='model', help='Checkpoint file name', required=False)
     parser.add_argument('--freeze-backbone', type=bool, default=True, help='Freeze the backbone', required=False)
     parser.add_argument('--dirpath', type=str, help='Directory to save the checkpoints', required=True)
     args = parser.parse_args()
