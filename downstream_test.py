@@ -12,7 +12,9 @@ from torch.utils.data import DataLoader
 from classifier import SSLClassifier
 from torch import nn, set_float32_matmul_precision
 # from torchvision.transforms import ToPILImage, Resize
-from torchmetrics.classification import MulticlassConfusionMatrix
+# from torchmetrics.classification import MulticlassConfusionMatrix
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, confusion_matrix
+
 
 set_float32_matmul_precision('medium')
 np.random.seed(42)
@@ -41,8 +43,12 @@ def main(args):
 
     target = torch.tensor(y_orig)
     preds = torch.tensor(y_pred)
-    metric = MulticlassConfusionMatrix(num_classes=6)
-    print(metric(preds, target))
+    
+    print('Accuracy:', accuracy_score(target, preds))
+    print('F1:', f1_score(target, preds, average='weighted'))
+    print('Precision:', precision_score(target, preds, average='weighted'))
+    print('Recall:', recall_score(target, preds, average='weighted'))
+    print('Confusion Matrix:', confusion_matrix(target, preds))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Train Barlow Twins model')

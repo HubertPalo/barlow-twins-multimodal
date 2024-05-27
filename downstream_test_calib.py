@@ -12,7 +12,9 @@ from torch.utils.data import DataLoader
 from classifier import SSLClassifier
 from torch import nn, set_float32_matmul_precision
 # from torchvision.transforms import ToPILImage, Resize
-from torchmetrics.classification import MulticlassConfusionMatrix
+# from torchmetrics.classification import MulticlassConfusionMatrix
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, confusion_matrix
+
 
 set_float32_matmul_precision('medium')
 np.random.seed(42)
