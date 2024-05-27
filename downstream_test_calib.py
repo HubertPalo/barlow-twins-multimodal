@@ -44,8 +44,13 @@ def main(args):
 
     target = torch.tensor(y_orig)
     preds = torch.tensor(y_pred)
-    metric = MulticlassConfusionMatrix(num_classes=6)
-    print(metric(preds, target))
+    
+    # print(metric(preds, target))
+    print('Accuracy:', accuracy_score(target, preds))
+    print('F1:', f1_score(target, preds, average='weighted'))
+    print('Precision:', precision_score(target, preds, average='weighted'))
+    print('Recall:', recall_score(target, preds, average='weighted'))
+    print('Confusion Matrix:', confusion_matrix(target, preds))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Train Barlow Twins model')
