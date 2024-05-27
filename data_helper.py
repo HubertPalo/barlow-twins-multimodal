@@ -90,7 +90,7 @@ def read_files(validation=True):
     return train_data, train_y, validation_data, validation_y, test_data, test_y
 
 
-
+# def timeseries2imageRP(data, threshold=0.5):
 
 def timeserie2image(data, filename=None, indexes=[1,2,3,4,5,6,7,8,9,1,3,5,7,9,2,4,6,8,1,4,7,1,5,8,2,5,9,3,6,9,4,8,3,7,2,6]):
     if data.shape[1] == 9:
@@ -105,8 +105,8 @@ def timeserie2image(data, filename=None, indexes=[1,2,3,4,5,6,7,8,9,1,3,5,7,9,2,
     # im = Image.fromarray(data)
     # im.save(filename)
     # Turn all over 255 to 255
-    data[data > 255] = 255
-    data[data < 0] = 0
+    # data[data > 255] = 255
+    # data[data < 0] = 0
     if filename:
         plt.imshow(data)
         plt.colorbar()
