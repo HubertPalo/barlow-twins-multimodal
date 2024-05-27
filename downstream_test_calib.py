@@ -20,11 +20,22 @@ set_float32_matmul_precision('medium')
 np.random.seed(42)
 
 def main(args):
+    prediction_head = nn.Sequential(
+            nn.Linear(512, 64),
+            nn.ReLU(),
+            nn.Linear(64, 64),
+            nn.ReLU(),
+            nn.BatchNorm1d(64),
+            nn.Linear(64, 6),
+            nn.Softmax(dim=1)
+        )
+    
     prefix = 'FROZEN' if args.freeze_backbone else 'FINETUNING'
     model = BarlowTwins.load_from_checkpoint(f'{args.exp_folder}/{args.dirpath}/BT-PRETEXT-{args.filename}.ckpt')
     classifier = SSLClassifier.load_from_checkpoint(
         f'{args.exp_folder}/{args.dirpath}/BT-DOWNSTREAM-{prefix}-{args.filename}.ckpt',
         backbone=model.backbone,
+        prediction_head=prediction_head,
         freeze_backbone=True
         )
     _, _, val_data, val_y, _, _ = read_files()
