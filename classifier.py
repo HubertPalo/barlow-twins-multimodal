@@ -23,7 +23,7 @@ class SSLClassifier(L.LightningModule):
             nn.Linear(64, 64),
             nn.ReLU(),
             # nn.Dropout(0.25),
-            nn.BatchNorm1d(128),
+            nn.BatchNorm1d(64),
             nn.Linear(64, 6),
             nn.Softmax(dim=1)
         )
