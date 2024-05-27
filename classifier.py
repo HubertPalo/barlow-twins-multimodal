@@ -16,13 +16,16 @@ class SSLClassifier(L.LightningModule):
         for param in self.backbone.parameters():
             param.requires_grad = not freeze_backbone
         self.prediction_head = nn.Sequential(
-            nn.Linear(512, 256),
-            nn.BatchNorm1d(256),
-            nn.Dropout(0.25),
+            nn.Linear(512, 64),
+            # nn.BatchNorm1d(64),
+            # nn.Dropout(0.25),
             nn.ReLU(),
-            nn.Linear(256, 128),
+            nn.Linear(64, 64),
+            nn.ReLU(),
+            # nn.Dropout(0.25),
             nn.BatchNorm1d(128),
-            nn.Linear(128, 6)
+            nn.Linear(64, 6),
+            nn.Softmax(dim=1)
         )
         self.loss_function = nn.CrossEntropyLoss()
 
