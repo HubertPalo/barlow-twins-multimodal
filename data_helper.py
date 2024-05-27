@@ -105,8 +105,8 @@ def timeserie2image(data, filename=None, indexes=[1,2,3,4,5,6,7,8,9,1,3,5,7,9,2,
     # im = Image.fromarray(data)
     # im.save(filename)
     # Turn all over 255 to 255
-    # data[data > 255] = 255
-    # data[data < 0] = 0
+    data[data > 255] = 255
+    data[data < 0] = 0
     if filename:
         plt.imshow(data)
         plt.colorbar()

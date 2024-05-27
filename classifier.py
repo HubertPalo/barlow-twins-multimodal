@@ -30,11 +30,8 @@ class SSLClassifier(L.LightningModule):
         self.loss_function = nn.CrossEntropyLoss()
 
     def forward(self, x):
-        # print("FORWARD1", x.shape)
         x = self.backbone(x).flatten(start_dim=1)
-        # print("FORWARD2", x.shape)
         x = self.prediction_head(x)
-        # print("FORWARD3", x.shape)
         return x
     
     def training_step(self, batch, batch_idx):
@@ -49,9 +46,6 @@ class SSLClassifier(L.LightningModule):
         x = batch[0]
         y = batch[1]
         logits = self(x)
-        # Print y original and y predicted
-        print("Y", y)
-        print("LOGITS", logits)
         loss = self.loss_function(logits, y)
         self.log("val_loss", loss)
         return loss
@@ -67,12 +61,7 @@ class SSLClassifier(L.LightningModule):
     def predict_step(self, batch, batch_idx, dataloader_idx=0):
         x = batch[0]
         x = self(x)
-        print("PREDICT SHAPE", x.shape)
         x = np.argmax(x.cpu(), axis=1)
-        
-        print("PREDICT SHAPE", x.shape)
-        print("PREDICT", x)
-        print("PREDICT2", batch[1])
         return [x, batch[1]]
     
     def configure_optimizers(self):
