@@ -89,8 +89,18 @@ def read_files(validation=True):
         validation_y = None
     return train_data, train_y, validation_data, validation_y, test_data, test_y
 
+def heaviside(x1, x2, threshold=0.5):
+    return 1 if threshold > abs(x1 - x2) else 0
+    
 
-# def timeseries2imageRP(data, threshold=0.5):
+def timeseries2imageRP(data, threshold=0.5):
+    if data.shape[1] == 9:
+        data = data.T
+    image = np.zeros((data.shape[0], data.shape[0]))
+    for i in range(data.shape[0]):
+        for j in range(data.shape[0]):
+            image[i, j] = heaviside(data[i, :], data[j, :], threshold)
+    return image
 
 def timeserie2image(data, filename=None, indexes=[1,2,3,4,5,6,7,8,9,1,3,5,7,9,2,4,6,8,1,4,7,1,5,8,2,5,9,3,6,9,4,8,3,7,2,6]):
     if data.shape[1] == 9:
@@ -120,6 +130,19 @@ def preprocess_data(data: pd.DataFrame):
     for i in range(data.shape[0]):
         signal = data.iloc[i,:].values.reshape(9, -1)
         image = timeserie2image(signal)
+        image = np.array([image, image, image])
+        image = torch.tensor(image)
+        image = ToPILImage()(image)
+        image = Resize((224, 224))(image)
+        # image = ToTensor()(image)
+        result.append(image)
+    return result
+
+def preprocess_data2(data: pd.DataFrame):
+    result = []
+    for i in range(data.shape[0]):
+        signal = data.iloc[i,:].values.reshape(9, -1)
+        image = timeseries2imageRP(signal)
         image = np.array([image, image, image])
         image = torch.tensor(image)
         image = ToPILImage()(image)
