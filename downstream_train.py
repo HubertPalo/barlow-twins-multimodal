@@ -10,14 +10,26 @@ import os
 from classifier import SSLClassifier
 from torch.utils.data import DataLoader
 import argparse
+from torch import nn
 
 set_float32_matmul_precision('medium')
 np.random.seed(42)
 
 def main(args):
+
+    prediction_head = nn.Sequential(
+            nn.Linear(512, 64),
+            nn.ReLU(),
+            nn.Linear(64, 64),
+            nn.ReLU(),
+            nn.BatchNorm1d(64),
+            nn.Linear(64, 6),
+            nn.Softmax(dim=1)
+        )
+    
     os.makedirs(f'{args.exp_folder}/{args.dirpath}', exist_ok=True)
     model = BarlowTwins.load_from_checkpoint(f'{args.exp_folder}/{args.dirpath}/BT-PRETEXT-{args.filename}.ckpt')
-    classifier = SSLClassifier(backbone=model.backbone, freeze_backbone=args.freeze_backbone)
+    classifier = SSLClassifier(backbone=model.backbone, prediction_head=prediction_head, freeze_backbone=args.freeze_backbone)
 
     train_data, train_y, validation_data, validation_y, _, _ = read_files()
     train_x = preprocess_data(train_data)
