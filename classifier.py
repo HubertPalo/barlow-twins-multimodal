@@ -13,8 +13,9 @@ class SSLClassifier(L.LightningModule):
         super().__init__()
         self.backbone = backbone
         # Freeze the backbone
-        for param in self.backbone.parameters():
-            param.requires_grad = not freeze_backbone
+        if backbone:
+            for param in self.backbone.parameters():
+                param.requires_grad = not freeze_backbone
         self.prediction_head = prediction_head
         self.loss_function = nn.CrossEntropyLoss()
 
