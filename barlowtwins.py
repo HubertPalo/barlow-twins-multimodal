@@ -48,5 +48,6 @@ class BarlowTwins(L.LightningModule):
         return self.backbone(batch[0]).flatten(start_dim=1)
 
     def configure_optimizers(self):
-        optimizer = optim.Adam(self.parameters())
+        # optimizer = optim.Adam(self.parameters())
+        optimizer = optim.SGD(self.parameters(), lr=0.06)
         return optimizer

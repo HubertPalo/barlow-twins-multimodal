@@ -34,9 +34,9 @@ def main(args):
     model = BarlowTwins.load_from_checkpoint(f'{args.exp_folder}/{args.dirpath}/BT-PRETEXT-{args.pretext_model_filename}.ckpt')
     classifier = SSLClassifier.load_from_checkpoint(
         f'{args.exp_folder}/{args.dirpath}/BT-DOWNSTREAM-{prefix}-{args.downstream_model_filename}.ckpt',
-        backbone=model.backbone,
-        prediction_head=prediction_head,
-        freeze_backbone=True
+        # backbone=model.backbone,
+        # prediction_head=prediction_head,
+        # freeze_backbone=True
         )
     _, _, val_data, val_y, _, _ = read_files()
     test_x = preprocess_data(val_data)
