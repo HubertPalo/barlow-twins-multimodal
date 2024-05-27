@@ -37,8 +37,8 @@ def main(args):
     y_orig = []
     y_pred = []
     for pred_list in predictions:
-        for i in range(len(pred_list[1])):
-            print('ORIG', pred_list[1][i], 'PRED', pred_list[0][i])
+        # for i in range(len(pred_list[1])):
+            # print('ORIG', pred_list[1][i], 'PRED', pred_list[0][i])
         y_orig.extend(pred_list[1].tolist())
         y_pred.extend(pred_list[0].tolist())
 
@@ -50,7 +50,7 @@ def main(args):
     print('F1:', f1_score(target, preds, average='weighted'))
     print('Precision:', precision_score(target, preds, average='weighted'))
     print('Recall:', recall_score(target, preds, average='weighted'))
-    print('Confusion Matrix:', confusion_matrix(target, preds))
+    print('Confusion Matrix:\n', confusion_matrix(target, preds))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Train Barlow Twins model')

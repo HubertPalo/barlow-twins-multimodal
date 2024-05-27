@@ -48,7 +48,7 @@ def main(args):
     print('F1:', f1_score(target, preds, average='weighted'))
     print('Precision:', precision_score(target, preds, average='weighted'))
     print('Recall:', recall_score(target, preds, average='weighted'))
-    print('Confusion Matrix:', confusion_matrix(target, preds))
+    print('Confusion Matrix:\n', confusion_matrix(target, preds))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Train Barlow Twins model')
