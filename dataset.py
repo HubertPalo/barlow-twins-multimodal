@@ -16,9 +16,9 @@ class UCIHARDataset(Dataset):
         sample = self.x[index]
         label = self.y.iloc[index,0]
         # Reduce the label by 1 to make it 0-based
-        print('LABEL BEFORE:', label)
+        # print('LABEL BEFORE:', label)
         label = label - 1
-        print('LABEL AFTER:', label)
+        # print('LABEL AFTER:', label)
         if self.output_num == 1:
             if self.transform is not None:
                 sample = self.transform(sample)
